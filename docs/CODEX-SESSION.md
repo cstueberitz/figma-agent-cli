@@ -1,4 +1,4 @@
-# Codex Working Notes
+# Maintainer Session Notes
 
 ## Project Overview
 
@@ -6,7 +6,7 @@
 
 **Location:** Repo root (the directory containing `src/index.js`)
 **npm package:** `figma-ds-cli` (v1.1.1)
-**GitHub:** https://github.com/cstueberitz/figma-codex-cli
+**GitHub:** https://github.com/cstueberitz/figma-agent-cli
 
 ## Useful Commands
 

@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <b>Use Figma Desktop with Codex, Claude, wrapper scripts, or local agents.</b><br>
+  <b>Use Figma Desktop with Codex, Claude, Ollama wrappers, or other local agents.</b><br>
   Create, inspect, and modify files in Figma without a REST API key.<br>
   Keep the Figma backend stable and swap the assistant layer as needed.
 </p>
@@ -46,7 +46,7 @@ This repo is being shaped around two layers:
 - **Core**: the Figma CLI, daemon, plugin bridge, tokens, render, verify, export, and diagnosis flows
 - **Adapters**: lightweight launch and instruction layers for individual assistants
 
-The launcher defaults to Codex today so the repo remains immediately usable, but the core is being prepared for:
+The launcher defaults to the configured profile so the repo stays immediately usable, and the core is designed for:
 
 - Codex out of the box
 - Claude via a dedicated adapter
@@ -79,6 +79,24 @@ node src/index.js assistant install ollama
 node src/index.js assistant current
 ```
 
+For most people the easiest path is:
+
+- leave the default as-is if you use Codex
+- run `node src/index.js assistant install claude` if you use Claude
+- run `node src/index.js assistant install ollama` if you want a local wrapper starter
+
+## Consistency by Design
+
+This repo is set up so assistant-specific helper files can be generated later without the project starting to feel fragmented.
+
+That means:
+- the Figma backend stays shared
+- assistant profiles reuse one common base instruction layer
+- generated helper files follow the same section order and naming
+- adapters are allowed to be different in launch details, but not in repo structure or tone
+
+If a later assistant writes repo-local helper markdown, it should still read like part of the same maintained system.
+
 ---
 
 ## Quickstart
@@ -105,6 +123,15 @@ That gives new users a simple first-run path:
 2. `fig-start --safe` avoids patching friction
 3. `smoke` proves the file is connected and render-ready
 
+If you are not using the default assistant profile, switch it first:
+
+```bash
+node src/index.js assistant list
+node src/index.js assistant install claude
+```
+
+The install step writes any needed compatibility file in the repo using the shared base profile first, then appends the assistant-specific layer. That keeps generated helper files consistent even when different LLMs are used later.
+
 If `doctor` says direct mode is ready later, you can switch to:
 
 ```bash
@@ -118,6 +145,7 @@ fig-start
 | Goal | Command |
 |---|---|
 | First working setup | `fig-start --safe` |
+| Switch to a different assistant | `node src/index.js assistant install <profile>` |
 | Quick health check | `figma-ds-cli doctor` |
 | End-to-end connection test | `node src/index.js smoke` |
 | Direct mode on a personal Mac | `fig-start` |
@@ -309,10 +337,10 @@ The repository folder is `figma-agent-cli`, while the CLI executable remains `fi
 
 ```bash
 cd figma-agent-cli
-codex
+<your assistant launcher>
 ```
 
-Then prompt your assistant with: `Connect to Figma`
+Then tell your assistant to connect to Figma and use this repo as the command backend.
 
 ---
 
@@ -744,7 +772,7 @@ Maintained by **[cstueberitz](https://github.com/cstueberitz)**.
 
 ## Origin
 
-This assistant-neutral variant started from **[silships/figma-cli](https://github.com/silships/figma-cli)** and the later Codex-focused port.
+This assistant-neutral variant started from **[silships/figma-cli](https://github.com/silships/figma-cli)** and later adapter-focused work built on top of that base.
 
 Shoutout to **[silships](https://github.com/silships)** for the original project, the initial workflow, and the foundation this repo builds on.
 
